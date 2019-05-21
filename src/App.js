@@ -4,32 +4,45 @@ import Button from './Components/Button'
 
 class App extends Component {
   state = {
-    userChoice: null
+    userChoice: null,
+    compChoice: null,
+    userScore: 0,
+    compScore: 0
   }
 
-  getComputerChoice() {
+  getComputerChoice = () => {
     const choices = ['Rock', 'Paper', 'Scissors']
     let compChoice = choices[Math.floor(Math.random() * 3)]
-    return compChoice
+    this.setState({ compChoice },
+      () => this.game())
   }
 
   handleButtonClick = (event) => {
-    this.getComputerChoice()
     this.setState({userChoice: event.target.value},
-      () => console.log(this.state.userChoice))
+      () => {
+        console.log(this.state.userChoice)
+        this.getComputerChoice()
+      })
   }
 
   game() {
-    const compChoice = this.getComputerChoice()
-    if (this.state.userChoice === compChoice)
-      console.log(compChoice, this.state.userChoice, 'Draw')
+    const { userChoice, compChoice } = this.state
 
-    else if ((this.state.userChoice === 'Rock' && compChoice === 'Paper') ||
-            (this.state.userChoice === 'Paper' && compChoice === 'Scissors') ||
-            (this.state.userChoice === 'Scissors' && compChoice === 'Rock'))
-            console.log(compChoice, this.state.userChoice, 'You lose')
+    if (userChoice === compChoice)
+       console.log(compChoice, userChoice, 'Draw')
 
-    else console.log(compChoice, this.state.userChoice, 'You won')
+    else if ((userChoice === 'Rock' && compChoice === 'Paper') ||
+            (userChoice === 'Paper' && compChoice === 'Scissors') ||
+            (userChoice === 'Scissors' && compChoice === 'Rock'))
+            {
+              this.setState( prevState => ({compScore: prevState.compScore + 1}),
+              () => console.log(compChoice, userChoice, 'You lose', this.state.userScore, this.state.compScore))
+            }
+
+    else {
+           this.setState( prevState => ({userScore: prevState.userScore + 1}),
+           () => console.log(compChoice, userChoice, 'You won', this.state.userScore, this.state.compScore))
+         }
 
   }
 
@@ -37,7 +50,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        {this.game()}
         <Button
           value='Rock'
           onClick={ this.handleButtonClick.bind(this)}
