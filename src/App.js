@@ -8,37 +8,32 @@ const gameRules = require('./Assets/GameRules.json')
 
 class App extends Component {
   state = {
-    userChoice: null,
-    compChoice: null,
-    userScore: 0,
-    compScore: 0,
-    win: null,
-    showModal: true,
+    userChoice:  null,
+    compChoice:  null,
+    userScore:   0,
+    compScore:   0,
+    win:         null,
+    showModal:   true,
     isModalOpen: true
   }
 
+  //Show modal on load only once
   componentDidMount() {
     this.setState({ showModal: false })
   }
 
-  showModal = () => {
-    const { userChoice, compChoice, showModal, isModalOpen } = this.state
-    if(isModalOpen) {
+  renderModal = () => {
+    if(this.state.isModalOpen) {
       return (
         <div className='Game_Rules'>
-          <Modal
-            title={gameRules.title}
-            textRock={gameRules.textRock}
-            textPaper={gameRules.textPaper}
-            textScissors={gameRules.textScissors}
-          />
+          <Modal gameRules={gameRules} />
           <Button onClick={this.resetGame.bind(this)}>Play</Button>
         </div>
       )
     }
-
   }
 
+  //Randomly select an item
   getComputerChoice = () => {
     const choices = ['Rock', 'Paper', 'Scissors']
     let compChoice = choices[Math.floor(Math.random() * 3)]
@@ -48,10 +43,8 @@ class App extends Component {
 
   handleButtonClick = event => {
     this.setState({userChoice: event.target.value},
-      () => {
-        console.log(this.state.userChoice)
-        this.getComputerChoice()
-      })
+      () => this.getComputerChoice()
+    )
   }
 
   renderResult = () => {
@@ -70,22 +63,23 @@ class App extends Component {
           <Result userChoice={userChoice}
           compChoice={compChoice}
           value='beats'
-          >You win</Result>
+          >You won</Result>
         )
       case 'comp':
         return (
           <Result userChoice={userChoice}
           compChoice={compChoice}
           value='loses to'
-          >You lose</Result>
+          >You lost</Result>
         )
       default:
         return null
     }
   }
 
+  //Defining game rules
   game = () => {
-    const { userChoice, compChoice, win } = this.state
+    const { userChoice, compChoice } = this.state
 
     if (userChoice === compChoice)
        this.setState({win: 'draw'})
@@ -93,50 +87,45 @@ class App extends Component {
     else if ((userChoice === 'Rock' && compChoice === 'Paper') ||
             (userChoice === 'Paper' && compChoice === 'Scissors') ||
             (userChoice === 'Scissors' && compChoice === 'Rock'))
-            {
-              this.setState(prevState => ({win: 'comp', compScore: prevState.compScore + 1}),
-              () => console.log(win, compChoice, userChoice, 'You lose', this.state.userScore, this.state.compScore))
-            }
+            this.setState(prevState => ({win: 'comp', compScore: prevState.compScore + 1}))
 
-    else {
-           this.setState( prevState => ({win: 'user', userScore: prevState.userScore + 1}),
-           () => console.log(win, compChoice, userChoice, 'You won', this.state.userScore, this.state.compScore))
-         }
-
+    else this.setState( prevState => ({win: 'user', userScore: prevState.userScore + 1}))
   }
 
   resetGame = () => {
-    this.setState({ userChoice: null,
-    compChoice: null,
-    userScore: 0,
-    compScore: 0,
-    win: null, isModalOpen: false})
+    this.setState({
+      userChoice:  null,
+      compChoice:  null,
+      userScore:   0,
+      compScore:   0,
+      win:         null,
+      isModalOpen: false
+    })
   }
 
   render () {
-    const { userChoice, compChoice } = this.state
     return (
       <div className="App">
         <header>Rock Paper Scissors</header>
 
-        {this.showModal()}
-
+        {this.renderModal()}
+        
         <div className='Choices'>
           <div className='User_Choice'>
             <h2>Your choice</h2>
             <Button
               value='Rock'
-              onClick={ this.handleButtonClick.bind(this)}
+              onClick={this.handleButtonClick.bind(this)}
             >Rock</Button>
 
             <Button
               value='Paper'
-              onClick={ this.handleButtonClick.bind(this)}
+              onClick={this.handleButtonClick.bind(this)}
             >Paper</Button>
 
             <Button
               value='Scissors'
-              onClick={ this.handleButtonClick.bind(this)}
+              onClick={this.handleButtonClick.bind(this)}
             >Scissors</Button>
           </div>
 
@@ -154,7 +143,7 @@ class App extends Component {
 
         <Button
           value='Reset'
-          onClick={ this.resetGame.bind(this)}
+          onClick={this.resetGame.bind(this)}
         >Reset</Button>
       </div>
     )

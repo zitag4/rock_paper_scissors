@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './Styles/ModalStyle.css'
-import Button from './Button'
-
 
 class Modal extends Component {
   render() {
-    const { title, textRock, textPaper, textScissors } = this.props
+    const {gameRules} = this.props
+
     return(
       <div className='modal'>
-        <h1>{title}</h1>
-        <p>{textRock}</p>
-        <p>{textPaper}</p>
-        <p>{textScissors}</p>
+        <h1>{gameRules.title}</h1>
+        <p>{gameRules.textRock}</p>
+        <p>{gameRules.textPaper}</p>
+        <p>{gameRules.textScissors}</p>
       </div>
     )
   }
 }
 
 export default Modal
+
+Modal.propTypes = {
+  gameRules: PropTypes.object.isRequired
+}
