@@ -1,0 +1,6 @@
+{
+  "title":"Game Rules",
+  "textRock":"rock crushes scissors, rock wins",
+  "textPaper":"paper covers rock, paper wins",
+  "textScissors":"scissors cuts paper, scissors win"
+}

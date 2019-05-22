@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import './App.css'
 import Button from './Components/Button'
 import Result from './Components/Result'
+import Modal from './Components/Modal'
+
+const gameRules = require('./Assets/GameRules.json')
 
 class App extends Component {
   state = {
@@ -9,7 +12,31 @@ class App extends Component {
     compChoice: null,
     userScore: 0,
     compScore: 0,
-    win: null
+    win: null,
+    showModal: true,
+    isModalOpen: true
+  }
+
+  componentDidMount() {
+    this.setState({ showModal: false })
+  }
+
+  showModal = () => {
+    const { userChoice, compChoice, showModal, isModalOpen } = this.state
+    if(isModalOpen) {
+      return (
+        <div className='Game_Rules'>
+          <Modal
+            title={gameRules.title}
+            textRock={gameRules.textRock}
+            textPaper={gameRules.textPaper}
+            textScissors={gameRules.textScissors}
+          />
+          <Button onClick={this.resetGame.bind(this)}>Play</Button>
+        </div>
+      )
+    }
+
   }
 
   getComputerChoice = () => {
@@ -83,7 +110,7 @@ class App extends Component {
     compChoice: null,
     userScore: 0,
     compScore: 0,
-    win: null})
+    win: null, isModalOpen: false})
   }
 
   render () {
@@ -91,6 +118,8 @@ class App extends Component {
     return (
       <div className="App">
         <header>Rock Paper Scissors</header>
+
+        {this.showModal()}
 
         <div className='Choices'>
           <div className='User_Choice'>
