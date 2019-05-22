@@ -17,7 +17,7 @@ class App extends Component {
       () => this.game())
   }
 
-  handleButtonClick = (event) => {
+  handleButtonClick = event => {
     this.setState({userChoice: event.target.value},
       () => {
         console.log(this.state.userChoice)
@@ -25,7 +25,7 @@ class App extends Component {
       })
   }
 
-  game() {
+  game = () => {
     const { userChoice, compChoice } = this.state
 
     if (userChoice === compChoice)
@@ -46,24 +46,53 @@ class App extends Component {
 
   }
 
+  resetGame = () => {
+    this.setState({ userChoice: null,
+    compChoice: null,
+    userScore: 0,
+    compScore: 0 })
+  }
+
   render () {
 
     return (
       <div className="App">
-        <Button
-          value='Rock'
-          onClick={ this.handleButtonClick.bind(this)}
-        >Rock</Button>
+        <header>Rock Paper Scissors</header>
+
+        <div className='Choices'>
+          <div className='User_Choice'>
+            <h2>Your choice</h2>
+            <Button
+              value='Rock'
+              onClick={ this.handleButtonClick.bind(this)}
+            >Rock</Button>
+
+            <Button
+              value='Paper'
+              onClick={ this.handleButtonClick.bind(this)}
+            >Paper</Button>
+
+            <Button
+              value='Scissors'
+              onClick={ this.handleButtonClick.bind(this)}
+            >Scissors</Button>
+          </div>
+
+          <div>
+            <h2>Computer choice</h2>
+            <div className='Computer_Choice'>{this.state.compChoice}</div>
+          </div>
+        </div>
+
+        <div className='Score'>
+          <h2>Score</h2>
+          <span>You {this.state.userScore} : {this.state.compScore} Computer</span>
+        </div>
 
         <Button
-          value='Paper'
-          onClick={ this.handleButtonClick.bind(this)}
-        >Paper</Button>
-
-        <Button
-          value='Scissors'
-          onClick={ this.handleButtonClick.bind(this)}
-        >Scissors</Button>
+          value='Reset'
+          onClick={ this.resetGame.bind(this)}
+        >Reset</Button>
       </div>
     )
   }
