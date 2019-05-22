@@ -46,7 +46,7 @@ header {
 
 .Score {
   margin-top: 30px;
-  height: 100px;
+  height: auto;
   border: 3px solid #282c34;
   border-radius: 30px;
 }
